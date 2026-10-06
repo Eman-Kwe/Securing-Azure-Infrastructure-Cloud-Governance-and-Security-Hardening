@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------
+# Lab 05 — Azure Governance and Security Hardening
+# ---------------------------------------------------------------
+
+# Unredacted screenshots
+# Save originals here, blur tenant domain / subscription ID / email,
+# then copy the cleaned version into screenshots/. Only cleaned ones get committed.
+screenshots/raw/
+*-unredacted.png
+*-original.png
+
+# Secrets and credentials (never commit these)
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*credentials*
+*secret*
+passwords.txt
+
+# Azure CLI local config and tokens
+.azure/
+azureProfile.json
+msal_token_cache.*
+accessTokens.json
+
+# draw.io backup and temp files
+*.drawio.bkp
+*.drawio.dtmp
+.$*.drawio
+.$*.bkp
+
+# Exported data that may contain IDs
+*.csv
+*.json.bak
+role-assignments-export.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs
+*.log
