@@ -145,11 +145,13 @@ A few points that are often stated incorrectly about these controls:
 
 ## Naming Conventions Used
 
+Replace `yourname` with your first name in lowercase, no spaces (for example, `rg-lab05-alex`). Replace `<yourtenant>` with your Entra ID tenant domain.
+
 | Item | Value |
 |------|-------|
-| Resource group | `rg-lab05-gov-manuel` |
+| Resource group | `rg-lab05-yourname` |
 | Region | East US |
-| Test user UPN | `junior-dev-manuel@<yourtenant>.onmicrosoft.com` |
+| Test user UPN | `junior-dev-yourname@<yourtenant>.onmicrosoft.com` |
 | Test user display name | Junior Developer |
 | Policy assignment | `Restrict-VM-Sizes` |
 | Allowed VM sizes | `Standard_B1s`, `Standard_B1ms` |
@@ -181,13 +183,13 @@ The resource group is the scope for every control in this lab.
 
 1. Sign in at [portal.azure.com](https://portal.azure.com) with your Admin account.
 2. Search for **Resource groups** and click **+ Create**.
-3. Resource group name: `rg-lab05-gov-manuel`
+3. Resource group name: `rg-lab05-yourname`
 4. Region: **East US**
 5. Click **Review + create**, then **Create**.
 
 **Verify (Cloud Shell):**
 ```bash
-az group show --name rg-lab05-gov-manuel --output table
+az group show --name rg-lab05-yourname --output table
 ```
 
 📸 **Screenshot `01-resource-group-created.png`:** The resource group Overview page showing the name and East US location.
@@ -201,14 +203,14 @@ az group show --name rg-lab05-gov-manuel --output table
 #### Step 1: Create the user in Entra ID (Identify)
 
 1. Search for **Microsoft Entra ID** → **Users** → **+ New user** → **Create new user**.
-2. User principal name: `junior-dev-manuel`
+2. User principal name: `junior-dev-yourname`
 3. Display name: `Junior Developer`
 4. Uncheck **Auto-generate password** and set one you'll remember for Phase 3.
 5. Click **Review + create**, then **Create**.
 
 **Verify:**
 ```bash
-az ad user show --id junior-dev-manuel@<yourtenant>.onmicrosoft.com \
+az ad user show --id junior-dev-yourname@<yourtenant>.onmicrosoft.com \
   --query "{name:displayName, upn:userPrincipalName}" --output table
 ```
 
@@ -218,7 +220,7 @@ az ad user show --id junior-dev-manuel@<yourtenant>.onmicrosoft.com \
 
 #### Step 2: Assign Reader at the resource group scope (Protect)
 
-1. Open `rg-lab05-gov-manuel` → **Access control (IAM)**.
+1. Open `rg-lab05-yourname` → **Access control (IAM)**.
 2. **+ Add** → **Add role assignment**.
 3. **Role** tab: search **Reader**, select it, click **Next**.
 4. **Members** tab: **+ Select members** → search **Junior Developer** → **Select**.
@@ -226,9 +228,9 @@ az ad user show --id junior-dev-manuel@<yourtenant>.onmicrosoft.com \
 
 **Verify:**
 ```bash
-az role assignment list --resource-group rg-lab05-gov-manuel --output table
+az role assignment list --resource-group rg-lab05-yourname --output table
 ```
-Look for the Junior Developer with role `Reader` and a scope ending in `/resourceGroups/rg-lab05-gov-manuel`.
+Look for the Junior Developer with role `Reader` and a scope ending in `/resourceGroups/rg-lab05-yourname`.
 
 📸 **Screenshot `03-reader-role-assigned.png`:** IAM → **Role assignments** tab showing Junior Developer with the Reader role. Make sure the scope column shows "This resource".
 
@@ -243,8 +245,8 @@ A control you haven't tested is a control you can't trust.
 #### Step 1: Sign in as the Junior Developer
 
 1. Open an incognito window and go to [portal.azure.com](https://portal.azure.com).
-2. Sign in as `junior-dev-manuel@<yourtenant>.onmicrosoft.com`. Complete the MFA setup if prompted.
-3. Go to **Resource groups**. Only `rg-lab05-gov-manuel` should appear.
+2. Sign in as `junior-dev-yourname@<yourtenant>.onmicrosoft.com`. Complete the MFA setup if prompted.
+3. Go to **Resource groups**. Only `rg-lab05-yourname` should appear.
 
 📸 **Screenshot `04-junior-dev-sees-one-rg.png`:** The Resource groups list in the incognito window showing only the lab resource group, with the signed-in user visible in the top-right corner (blur the domain).
 
@@ -274,7 +276,7 @@ The scenario: an engineer means to pick `Standard_D2s_v3` (2 cores) and picks `S
 
 1. Search **Policy** → **Authoring** → **Assignments** → **Assign policy**.
 2. **Basics tab:**
-   - **Scope:** click **...**, select your subscription, then `rg-lab05-gov-manuel`. Click **Select**.
+   - **Scope:** click **...**, select your subscription, then `rg-lab05-yourname`. Click **Select**.
    - **Policy definition:** click **...**, search `Allowed virtual machine size SKUs`, select it, click **Add**.
    - **Assignment name:** `Restrict-VM-Sizes`
 3. **Parameters tab:**
@@ -284,7 +286,7 @@ The scenario: an engineer means to pick `Standard_D2s_v3` (2 cores) and picks `S
 
 **Verify:**
 ```bash
-az policy assignment list --resource-group rg-lab05-gov-manuel --output table
+az policy assignment list --resource-group rg-lab05-yourname --output table
 ```
 
 📸 **Screenshot `06-policy-assignment-listed.png`:** Policy → Assignments showing `Restrict-VM-Sizes` with the lab resource group as its scope.
@@ -310,7 +312,7 @@ You're testing that the policy blocks what it should **and** allows what it shou
 
 #### Step 1: Try a blocked size
 
-1. Open `rg-lab05-gov-manuel` → **+ Create** → **Virtual machine** → **Create**.
+1. Open `rg-lab05-yourname` → **+ Create** → **Virtual machine** → **Create**.
 2. VM name: `vm-policy-test`, Image: **Ubuntu Server**.
 3. **Size:** **See all sizes** → `Standard_D2s_v3`.
 4. Click **Review + create** and expand the error.
@@ -338,7 +340,7 @@ You're testing that the policy blocks what it should **and** allows what it shou
 
 #### Step 1: Create the budget with alerts
 
-1. Open `rg-lab05-gov-manuel` → **Cost Management** → **Budgets** → **+ Add**.
+1. Open `rg-lab05-yourname` → **Cost Management** → **Budgets** → **+ Add**.
 2. **Create budget tab:**
    - Name: `Monthly-Lab-Budget`
    - Reset period: **Billing month**
@@ -357,7 +359,7 @@ You're testing that the policy blocks what it should **and** allows what it shou
 
 **Verify:**
 ```bash
-az consumption budget list --resource-group rg-lab05-gov-manuel --output table
+az consumption budget list --resource-group rg-lab05-yourname --output table
 ```
 
 📸 **Screenshot `10-budget-listed.png`:** The Budgets page showing `Monthly-Lab-Budget` with the $50 amount and billing-month reset.
@@ -381,7 +383,7 @@ az consumption budget list --resource-group rg-lab05-gov-manuel --output table
 
 | Test | Expected | Observed |
 |------|----------|----------|
-| Junior Developer sees only the lab resource group | Only `rg-lab05-gov-manuel` listed | ☐ |
+| Junior Developer sees only the lab resource group | Only `rg-lab05-yourname` listed | ☐ |
 | Junior Developer creates a Storage Account | `AuthorizationFailed` | ☐ |
 | VM with `Standard_D2s_v3` | Policy check failed: `Restrict-VM-Sizes` | ☐ |
 | VM with `Standard_B1s` | Validation passed | ☐ |
@@ -427,18 +429,18 @@ az consumption budget list --resource-group rg-lab05-gov-manuel --output table
 
 ## Cleanup
 
-1. **Delete the resource group.** `rg-lab05-gov-manuel` → **Overview** → **Delete resource group**. Type the name to confirm. This removes the policy assignment scoped to it.
-2. **Delete the test user.** Entra ID → Users → `junior-dev-manuel` → **Delete**.
+1. **Delete the resource group.** `rg-lab05-yourname` → **Overview** → **Delete resource group**. Type the name to confirm. This removes the policy assignment scoped to it.
+2. **Delete the test user.** Entra ID → Users → `junior-dev-yourname` → **Delete**.
 3. **Confirm the budget is gone.** Search **Cost Management** → **Budgets**. If `Monthly-Lab-Budget` is still listed, delete it.
 
 Or from Cloud Shell:
 ```bash
-az group delete --name rg-lab05-gov-manuel --yes
-az ad user delete --id junior-dev-manuel@<yourtenant>.onmicrosoft.com
+az group delete --name rg-lab05-yourname --yes
+az ad user delete --id junior-dev-yourname@<yourtenant>.onmicrosoft.com
 
 # Both should confirm the resources are gone
-az group exists --name rg-lab05-gov-manuel        # returns false
-az ad user show --id junior-dev-manuel@<yourtenant>.onmicrosoft.com   # returns an error
+az group exists --name rg-lab05-yourname        # returns false
+az ad user show --id junior-dev-yourname@<yourtenant>.onmicrosoft.com   # returns an error
 ```
 
 📸 **Screenshot `12-cleanup-verified.png`:** Cloud Shell output showing `false` from `az group exists`, or the Resource groups list without the lab group.
@@ -457,17 +459,14 @@ az ad user show --id junior-dev-manuel@<yourtenant>.onmicrosoft.com   # returns 
 
 ---
 
-## Reference
 
-- [Azure RBAC overview](https://learn.microsoft.com/azure/role-based-access-control/overview)
-- [Azure Policy overview](https://learn.microsoft.com/azure/governance/policy/overview)
-- [Create and manage budgets](https://learn.microsoft.com/azure/cost-management-billing/costs/tutorial-acm-create-budgets)
-- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
 
 ---
 
 **Author:** Manuel Yannick Armah
+
 **Project:** Securing Azure Infrastructure: Cloud Governance and Security Hardening
+
 **Difficulty:** Beginner
+
 **Time to Complete:** 60–75 minutes (plus 15–30 minutes waiting for policy to apply)
- 
