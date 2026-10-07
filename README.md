@@ -27,10 +27,6 @@ Everything in this lab is scoped to a single resource group, so nothing else in 
 - An Azure Policy assignment that only allows `Standard_B1s` and `Standard_B1ms` VMs
 - A $50 monthly budget with an 80% actual alert and a 100% forecasted alert
 
-Each control is tested in both directions: it blocks what it should block, and it allows what it should allow.
-
-**Author:** Manuel Yannick Armah
-
 **Skills demonstrated:**
 
 - Identity management in Microsoft Entra ID
@@ -41,40 +37,12 @@ Each control is tested in both directions: it blocks what it should block, and i
 - Mapping cloud controls to the NIST Cybersecurity Framework
 
 ---
-
-## Project Structure
-
-```
-Securing-Azure-Infrastructure-Cloud-Governance-and-Security-Hardening/
-├── README.md
-├── .gitignore
-├── architecture.drawio      # editable source (open in diagrams.net)
-├── architecture.png         # diagram image shown in this README
-└── screenshots/
-    ├── raw/                 # unblurred originals (git-ignored, never committed)
-    ├── 01-resource-group-created.png
-    ├── 02-entra-user-created.png
-    ├── 03-reader-role-assigned.png
-    ├── 04-junior-dev-sees-one-rg.png
-    ├── 05-authorization-failed.png
-    ├── 06-policy-assignment-listed.png
-    ├── 07-policy-parameters.png
-    ├── 08-policy-denied-d2s.png
-    ├── 09-policy-allowed-b1s.png
-    ├── 10-budget-listed.png
-    ├── 11-budget-alerts.png
-    └── 12-cleanup-verified.png
-```
-
----
-
 ## Architecture Diagram
 
 ![Architecture diagram](architecture.png)
 
 **How it works:** The Admin creates the Junior Developer in Entra ID, assigns the Reader role on the resource group, applies the VM size policy, and creates the budget. When the Junior Developer tries to create anything, RBAC returns `AuthorizationFailed`. When anyone, including the Admin, tries to deploy a VM size outside the allowed list, the policy blocks it at validation. The budget runs on its own and emails the Admin when a threshold is crossed.
 
-> **Editing the diagram:** `architecture.png` is ready to use as-is. If you change the design, open `architecture.drawio` at [app.diagrams.net](https://app.diagrams.net) (File → Open from → Device), make your edits, then File → Export as → PNG at 200% zoom and overwrite `architecture.png`.
 
 ---
 
@@ -191,10 +159,7 @@ The resource group is the scope for every control in this lab.
 ```bash
 az group show --name rg-lab05-yourname --output table
 ```
-
-📸 **Screenshot `01-resource-group-created.png`:** The resource group Overview page showing the name and East US location.
-
-![Resource group created](screenshots/01-resource-group-created.png)
+<img width="643" height="230" alt="Screenshot 2026-10-06 150253" src="https://github.com/user-attachments/assets/0b347c59-eaf4-4f08-a6cf-e0dc424521fb" />
 
 ---
 
@@ -214,9 +179,8 @@ az ad user show --id junior-dev-yourname@<yourtenant>.onmicrosoft.com \
   --query "{name:displayName, upn:userPrincipalName}" --output table
 ```
 
-📸 **Screenshot `02-entra-user-created.png`:** Entra ID → Users list with Junior Developer visible. Blur the tenant domain.
+<img width="660" height="415" alt="Screenshot 2026-10-06 150936" src="https://github.com/user-attachments/assets/b2170f45-f190-401c-8dd4-bd837f2b5537" />
 
-![Entra user created](screenshots/02-entra-user-created.png)
 
 #### Step 2: Assign Reader at the resource group scope (Protect)
 
@@ -232,11 +196,8 @@ az role assignment list --resource-group rg-lab05-yourname --output table
 ```
 Look for the Junior Developer with role `Reader` and a scope ending in `/resourceGroups/rg-lab05-yourname`.
 
-📸 **Screenshot `03-reader-role-assigned.png`:** IAM → **Role assignments** tab showing Junior Developer with the Reader role. Make sure the scope column shows "This resource".
+<img width="653" height="337" alt="Screenshot 2026-10-06 150902" src="https://github.com/user-attachments/assets/e3a09e36-6470-48ca-8cf7-c04100a51d63" />
 
-![Reader role assigned](screenshots/03-reader-role-assigned.png)
-
----
 
 ### Phase 3: Verify Access (the "Permission Denied" Test)
 
@@ -248,9 +209,8 @@ A control you haven't tested is a control you can't trust.
 2. Sign in as `junior-dev-yourname@<yourtenant>.onmicrosoft.com`. Complete the MFA setup if prompted.
 3. Go to **Resource groups**. Only `rg-lab05-yourname` should appear.
 
-📸 **Screenshot `04-junior-dev-sees-one-rg.png`:** The Resource groups list in the incognito window showing only the lab resource group, with the signed-in user visible in the top-right corner (blur the domain).
+<img width="1804" height="542" alt="Screenshot 2026-10-06 at 3 12 45 PM" src="https://github.com/user-attachments/assets/ad89f06f-d0f0-49db-a7a1-65eee2218cc0" />
 
-![Junior Developer sees one resource group](screenshots/04-junior-dev-sees-one-rg.png)
 
 #### Step 2: Try to create a resource
 
@@ -260,11 +220,7 @@ A control you haven't tested is a control you can't trust.
 
 **Expected:** `AuthorizationFailed` or "You do not have permission to perform this action."
 
-📸 **Screenshot `05-authorization-failed.png`:** The expanded error message showing the authorization failure.
-
-![Authorization failed](screenshots/05-authorization-failed.png)
-
-Close the incognito window when you're done.
+<img width="1916" height="955" alt="Screenshot 2026-10-06 at 3 11 47 PM" src="https://github.com/user-attachments/assets/efd4e3e4-3733-43d5-be72-ccc26cc2af37" />
 
 ---
 
@@ -289,20 +245,16 @@ The scenario: an engineer means to pick `Standard_D2s_v3` (2 cores) and picks `S
 az policy assignment list --resource-group rg-lab05-yourname --output table
 ```
 
-📸 **Screenshot `06-policy-assignment-listed.png`:** Policy → Assignments showing `Restrict-VM-Sizes` with the lab resource group as its scope.
-
-![Policy assignment listed](screenshots/06-policy-assignment-listed.png)
 
 #### Step 2: Confirm the allowed sizes
 
 1. Click `Restrict-VM-Sizes` → **View assignment**.
 2. Scroll to **Parameters**.
 
-📸 **Screenshot `07-policy-parameters.png`:** The assignment details showing `Standard_B1s` and `Standard_B1ms` as the allowed SKUs and Deny as the effect. Blur the subscription ID in the scope path.
-
-![Policy parameters](screenshots/07-policy-parameters.png)
-
 > ⏱️ **Wait 15–30 minutes before Phase 5.** New assignments take time to apply. If the test passes when it should fail, wait and retry before troubleshooting.
+
+
+<img width="942" height="317" alt="Screenshot 2026-10-06 150427" src="https://github.com/user-attachments/assets/a6ca4ea3-179c-48b1-84af-aa900144431a" />
 
 ---
 
@@ -362,18 +314,13 @@ You're testing that the policy blocks what it should **and** allows what it shou
 az consumption budget list --resource-group rg-lab05-yourname --output table
 ```
 
-📸 **Screenshot `10-budget-listed.png`:** The Budgets page showing `Monthly-Lab-Budget` with the $50 amount and billing-month reset.
-
-![Budget listed](screenshots/10-budget-listed.png)
-
 #### Step 2: Confirm the alert conditions
 
 1. Click `Monthly-Lab-Budget` → **Edit budget** → **Alert conditions**.
 2. Check both thresholds and the recipient are saved. Close without changing anything.
 
-📸 **Screenshot `11-budget-alerts.png`:** The saved alert conditions showing 80% Actual and 100% Forecasted. Blur your email.
+<img width="679" height="458" alt="Screenshot 2026-10-06 150558" src="https://github.com/user-attachments/assets/1d3aa482-cd8e-457a-908b-207e7b11e183" />
 
-![Budget alerts](screenshots/11-budget-alerts.png)
 
 ---
 
