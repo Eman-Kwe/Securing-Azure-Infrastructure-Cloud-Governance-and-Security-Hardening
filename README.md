@@ -398,4 +398,4 @@ az ad user show --id junior-dev-yourname@<yourtenant>.onmicrosoft.com   # return
 
 **Difficulty:** Beginner
 
-**Time to Complete:** 60–75 minutes (plus 15–30 minutes waiting for policy to apply)
+**Time to Complete:** 60 – 75 minutes (plus 15 – 30 minutes waiting for policy to apply)
