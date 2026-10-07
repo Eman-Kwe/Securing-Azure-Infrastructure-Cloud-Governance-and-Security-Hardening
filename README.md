@@ -39,7 +39,7 @@ Everything in this lab is scoped to a single resource group, so nothing else in 
 ---
 ## Architecture Diagram
 
-![Architecture diagram](architecture.png)
+<img width="1539" height="1022" alt="Azure Governance and Security Hardening Diagram" src="https://github.com/user-attachments/assets/35900cc7-0ef3-4652-872f-7275bd9bbdf4" />
 
 **How it works:** The Admin creates the Junior Developer in Entra ID, assigns the Reader role on the resource group, applies the VM size policy, and creates the budget. When the Junior Developer tries to create anything, RBAC returns `AuthorizationFailed`. When anyone, including the Admin, tries to deploy a VM size outside the allowed list, the policy blocks it at validation. The budget runs on its own and emails the Admin when a threshold is crossed.
 
