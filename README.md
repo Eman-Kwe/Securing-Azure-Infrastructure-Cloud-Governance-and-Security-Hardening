@@ -271,20 +271,12 @@ You're testing that the policy blocks what it should **and** allows what it shou
 
 **Expected:** "Validation failed" with "Policy check failed" naming `Restrict-VM-Sizes`. In API responses, the error code is `RequestDisallowedByPolicy`.
 
-📸 **Screenshot `08-policy-denied-d2s.png`:** The expanded validation error showing the policy assignment name as the reason.
-
-![Policy denied D2s_v3](screenshots/08-policy-denied-d2s.png)
-
 #### Step 2: Try an allowed size
 
 1. Go back to **Basics** and change the size to `Standard_B1s`.
 2. Click **Review + create**.
 
 **Expected:** validation passes. **Don't click Create.** Passing validation is the proof.
-
-📸 **Screenshot `09-policy-allowed-b1s.png`:** The "Validation passed" banner with `Standard_B1s` visible in the summary.
-
-![Policy allowed B1s](screenshots/09-policy-allowed-b1s.png)
 
 ---
 
@@ -390,10 +382,6 @@ az group exists --name rg-lab05-yourname        # returns false
 az ad user show --id junior-dev-yourname@<yourtenant>.onmicrosoft.com   # returns an error
 ```
 
-📸 **Screenshot `12-cleanup-verified.png`:** Cloud Shell output showing `false` from `az group exists`, or the Resource groups list without the lab group.
-
-![Cleanup verified](screenshots/12-cleanup-verified.png)
-
 ---
 
 ## Key Takeaways
@@ -403,12 +391,6 @@ az ad user show --id junior-dev-yourname@<yourtenant>.onmicrosoft.com   # return
 - **A budget is a smoke detector, not a sprinkler.** It tells you about spend; it doesn't stop it. Automatic response needs an Action Group wired to a function or runbook.
 - **Test controls in both directions.** Blocking the bad case isn't enough. You also need proof the good case still works.
 - **Governance maps directly to NIST CSF.** Govern sets the rules, Identify and Protect enforce them, Detect and Respond catch what slips through.
-
----
-
-
-
----
 
 **Author:** Manuel Yannick Armah
 
