@@ -4,7 +4,7 @@ This lab restricts a test user to view-only access with RBAC, blocks expensive V
 
 ## 🎬 Video Walkthrough
 <!-- Replace with your Loom link after recording -->
-[Loom walkthrough](https://www.loom.com/)
+[Loom walkthrough](https://www.loom.com/share/98cd50c96de945d79894ec45a77b60e2)
 
 ---
 
